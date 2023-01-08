@@ -5,6 +5,7 @@ export const Display = (props) => {
     <div className="display">
       <div id="memory">{props.memory}</div>
       <div id="actual">{props.actual}</div>
+      <div id="myId">Richi Coder</div>
     </div>
   );
 };
