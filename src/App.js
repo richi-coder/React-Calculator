@@ -6,10 +6,10 @@ import { Number } from "./Number.js"
 import { Message } from "./Message.js"
 
 
-const Equals = ({memory}) => {
+const Equals = ({memory,resetMemory}) => {
   return <button
   className="equals-button"
-  onClick={() => calculation(memory)}>=</button>
+  onClick={resetMemory}>=</button>
 };
 
 const Reset = ({reset}) => {
@@ -93,6 +93,10 @@ export default function App() {
   function resetActual() {
     setActual("");
   }
+  function resetMemory() {
+    setActual(memory);
+    setMemory([""]);
+  }
   return (
     <div className="calculator">
       <Display memory={memory} actual={actual}/>
@@ -110,8 +114,8 @@ export default function App() {
         <Operator operator={"+"} operation={operator} resetActual={resetActual} />
       </div>
       <div className="c-equals">
-      <Reset reset={reset}/>
-      <Equals memory={memory} />
+      <Reset reset={reset} />
+      <Equals memory={memory} resetMemory={resetMemory}/>
       </div>
       </div>
       <br />
