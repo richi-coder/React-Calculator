@@ -6,7 +6,7 @@ import { Number } from "./Number.js"
 import { Message } from "./Message.js"
 
 
-const Equals = ({memory,resetMemory}) => {
+const Equals = ({displayState,resetMemory}) => {
   return <button
   className="equals-button"
   onClick={resetMemory}>=</button>
@@ -42,6 +42,7 @@ export default function App() {
   const [memory, setMemory] = useState([""]);
   const [actual, setActual] = useState("");
   const [zero, setZero] = useState(false);
+  const [displayState, setDisplayState] = useState(false);
 
   useEffect(() => {
     setZero(false);
@@ -114,7 +115,7 @@ export default function App() {
       </div>
       <div className="c-equals">
       <Reset reset={reset} />
-      <Equals memory={memory} resetMemory={resetMemory}/>
+      <Equals memory={memory} resetMemory={resetMemory} displayState={displayState} />
       </div>
       </div>
       <br />
