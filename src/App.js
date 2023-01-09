@@ -20,7 +20,7 @@ const Reset = ({reset}) => {
   )
 }
 
-const Operator = ({operator,resetActual,operation,memory}) => {
+const Operator = ({operator,operation,memory}) => {
   return (
     <button
     disabled={(operator == "delete" && memory == [""]) ? true : false}
@@ -28,7 +28,6 @@ const Operator = ({operator,resetActual,operation,memory}) => {
     className="operator"
     onClick={() => {
       operation(operator);
-      resetActual;
       }}>
       {operator == "delete" ?
       <i className="fa-solid fa-delete-left"></i> :
@@ -43,6 +42,7 @@ export default function App() {
   const [memory, setMemory] = useState([""]);
   const [actual, setActual] = useState("");
   const [zero, setZero] = useState(false);
+
   useEffect(() => {
     setZero(false);
     if (/\/0/g.test(memory.join(""))) {
@@ -90,12 +90,11 @@ export default function App() {
     setActual("");
     setMemory([""]);
   }
-  function resetActual() {
-    setActual("");
-  }
+ 
   function resetMemory() {
     setActual(memory);
-    setMemory([""]);
+    console.log(actual)
+    //setMemory([""]);
   }
   return (
     <div className="calculator">
@@ -107,11 +106,11 @@ export default function App() {
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"delete"} operation={operator} resetActual={resetActual} memory={memory}/>
-        <Operator operator={"/"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"x"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"-"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"+"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"delete"} operation={operator} memory={memory}/>
+        <Operator operator={"/"} operation={operator} />
+        <Operator operator={"x"} operation={operator} />
+        <Operator operator={"-"} operation={operator} />
+        <Operator operator={"+"} operation={operator} />
       </div>
       <div className="c-equals">
       <Reset reset={reset} />
