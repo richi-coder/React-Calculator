@@ -23,7 +23,7 @@ const Reset = (props) => {
 const Operator = props => {
   return (
     <button
-    style={{backgroundColor: props.operator == "icon" ? "transparent" : "none"}}
+    style={{backgroundColor: props.operator == "icon" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
     onClick={() => {
       props.operation(props.operator);
