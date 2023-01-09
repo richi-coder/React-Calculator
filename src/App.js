@@ -111,23 +111,24 @@ let whichMult = [];
 // DIVISIONS
 if (howManyDivs !== null) {
 for (let i = 0; i < howManyDivs.length; i++) {
-    whichDiv = str.match(/\d+(\/)\d+/)[0].split("/")
-    division = (parseInt(whichDiv[0])/parseInt(whichDiv[1])).toString();
+    whichDiv = str.match(/\d+(\.\d+)?(\/)\d+(\.\d+)?/)[0].split("/")
+    division = (parseFloat(whichDiv[0])/parseFloat(whichDiv[1])).toString();
     str = str.replace(whichDiv.join("/"),division);
 }
 }
 // MULTIPLICATIONS
 if (howManyMult !== null) {
 for (let i = 0; i < howManyMult.length; i++) {
-    whichMult = str.match(/\d+(x)\d+/)[0].split("x");
-    multiplication = (parseInt(whichMult[0])*parseInt(whichMult[1])).toString();
+    whichMult = str.match(/\d+(\.\d+)?(x)\d+(\.\d+)?/)[0].split("x");
+    multiplication = (parseFloat(whichMult[0])*parseFloat(whichMult[1])).toString();
     str = str.replace(whichMult.join("x"),multiplication);
 }
 }
 // TOTAL SUM
-const result = str.match(/\D+\d+/g)
-                    .map(x => parseInt(x))
+const result = str.match(/\D+\d+(\.\d+)?/g)
+                    .map(x => parseFloat(x))
                     .reduce((e,acum) => e + acum, 0)
+                    .toFixed(3);
 //----------------------------
   
   return result
@@ -137,3 +138,6 @@ const result = str.match(/\D+\d+/g)
 
 // Dividir por cero
 //5-8+13-(5*(48515/0)*47)+(5/0)
+
+//2+3/2-6/3 = 1.5
+
