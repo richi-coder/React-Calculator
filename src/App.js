@@ -68,9 +68,11 @@ export default function App() {
 
 
   function operator(o) {
-    if (o == "delete") {
+    if (o == "delete" && memory.length > 1) {
       setMemory(memory.slice(0,memory.length - 1));
-    } 
+    } else if (o == "delete" && memory.length == 1) {
+      setMemory([""]);
+    }
     
     if (memory[0] === "" && o == "-") {
       setMemory([...memory,o])
