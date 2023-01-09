@@ -19,20 +19,15 @@ const Reset = ({reset}) => {
     onClick={reset}>C</button>
   )
 }
-// Este codigo suma dos numeros
+
 const Operator = ({operator,resetActual,deleteButton,operation}) => {
   return (
     <button
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
     onClick={() => {
-      if (operator == "delete") {
-        deleteButton;
-      } else {
-        console.log("no entra")
       operation(operator);
       resetActual;
-      }
       }}>
       {operator == "delete" ?
       <i className="fa-solid fa-delete-left"></i> :
@@ -73,14 +68,18 @@ export default function App() {
 
   function deleteButton() {
     console.log("entra")
-    //setMemory([memory.slice(0,memory.length)])
+    setMemory("")
   }
 
   function operator(o) {
+    if (o == "delete") {
+      setMemory(memory.slice(0));
+    } 
+    
     if (memory[0] === "" && o == "-") {
       setMemory([...memory,o])
     }
-    if (typeof memory[memory.length - 1] == "number") {
+    if (typeof memory[memory.length - 1] == "number" && o != "delete") {
       setMemory([...memory,o])
     } else if (typeof memory[memory.length - 1] != "number") {
       const copy = memory.slice(0,memory.length - 1);
