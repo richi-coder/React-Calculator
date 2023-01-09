@@ -101,6 +101,7 @@ body {
   border-radius: 50%;
   height: 35%;
   aspect-ratio: 1 / 1;
+  cursor: pointer;
 }
 
 .message {
