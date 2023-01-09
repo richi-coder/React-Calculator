@@ -77,6 +77,9 @@ export default function App() {
   return (
     <div className="calculator">
       <Display memory={memory} actual={actual}/>
+      <div>
+      <Message zero={zero}/>
+      </div>
       <br />
       <div className="buttons">
       <Number handleEnter={handleEnter} />
@@ -87,11 +90,10 @@ export default function App() {
         <Operator operator={"x"} operation={operator} resetActual={resetActual} />
         <Operator operator={"/"} operation={operator} resetActual={resetActual} />
       </div>
-      </div>
-      <br />
       <Equals memory={memory} />
       <Reset reset={reset}/>
-      <Message zero={zero}/>
+      </div>
+      <br />
     </div>
   );
 }
@@ -139,5 +141,5 @@ const result = str.match(/\D+\d+(\.\d+)?/g)
 // Dividir por cero
 //5-8+13-(5*(48515/0)*47)+(5/0)
 
-//2+3/2-6/3 = 1.5
+//2+3/2-6/3 = 1.5 OK, YA PUEDO SUMAR, RESTAR, MULTIPLICAR Y DIVIDIR OK
 
