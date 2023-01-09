@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { Display } from "./Display.js"
 import { Number } from "./Number.js"
 import { Message } from "./Message.js"
+
+
 const Equals = (props) => {
   return <button
   className="equals-button"
@@ -20,9 +22,9 @@ const Reset = (props) => {
 // Este codigo suma dos numeros
 const Operator = props => {
   return (
-    <button className="number"
-    style={{backgroundColor: props.operator == "icon" ? "initial" : "transparent"}}
-    id="operator"
+    <button
+    style={{backgroundColor: props.operator == "icon" ? "transparent" : "none"}}
+    className="operator"
     onClick={() => {
       props.operation(props.operator);
       props.resetActual;
