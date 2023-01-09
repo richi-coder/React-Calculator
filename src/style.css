@@ -132,6 +132,7 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1.8em;
 }
 
 .reset-button {
@@ -140,4 +141,5 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1.3em;
 }
