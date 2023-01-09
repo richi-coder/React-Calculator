@@ -20,16 +20,20 @@ const Reset = ({reset}) => {
   )
 }
 // Este codigo suma dos numeros
-const Operator = ({operator,resetActual,operation}) => {
+const Operator = ({operator,resetActual,operation,deleteButton}) => {
   return (
     <button
-    style={{backgroundColor: operator == "icon" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
+    style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
     onClick={() => {
+      if (operator == "delete") {
+        deleteButton;
+      } else {
       operation(operator);
       resetActual;
+      }
       }}>
-      {operator == "icon" ?
+      {operator == "delete" ?
       <i className="fa-solid fa-delete-left"></i> :
       operator == "/" ? 
       "÷" :
@@ -66,6 +70,11 @@ export default function App() {
     }
   }
 
+  function deleteButton() {
+    console.log("entra")
+    setMemory([memory.slice(0,memory.length)])
+  }
+
   function operator(o) {
     if (memory[0] === "" && o == "-") {
       setMemory([...memory,o])
@@ -95,7 +104,7 @@ export default function App() {
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"icon"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"delete"} operation={operator} resetActual={resetActual} deleteButton={deleteButton} />
         <Operator operator={"/"} operation={operator} resetActual={resetActual} />
         <Operator operator={"x"} operation={operator} resetActual={resetActual} />
         <Operator operator={"-"} operation={operator} resetActual={resetActual} />
