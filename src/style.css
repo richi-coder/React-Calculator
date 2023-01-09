@@ -127,7 +127,7 @@ body {
 }
 
 .equals-button {
-  background-color: rgb(82, 28, 28);
+  background-color: orangered;
   color: white;
   border: none;
   border-radius: 5px;
@@ -135,7 +135,7 @@ body {
 }
 
 .reset-button {
-  background-color: orangered;
+  background-color: rgb(82, 28, 28);
   color: white;
   border: none;
   border-radius: 5px;
