@@ -30,7 +30,7 @@ const Operator = props => {
       props.resetActual;
       }}>
       {props.operator == "icon" ?
-      <i class="fa-solid fa-delete-left"></i> :
+      <i className="fa-solid fa-delete-left"></i> :
       props.operator == "/" ? 
       "÷" :
       props.operator}
