@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Number = (props) => {
+export const Number = ({handleEnter}) => {
   const numbers = Array(10).fill(null);
   return (
     <div className="numbers">
@@ -8,7 +8,7 @@ export const Number = (props) => {
         return (
           <button 
           key={i}
-          onClick={props.handleEnter}
+          onClick={handleEnter}
           className="number"
           value={numbers.length - i - 1}
           >

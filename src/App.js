@@ -6,34 +6,34 @@ import { Number } from "./Number.js"
 import { Message } from "./Message.js"
 
 
-const Equals = (props) => {
+const Equals = ({memory}) => {
   return <button
   className="equals-button"
-  onClick={() => calculation(props.memory)}>=</button>
+  onClick={() => calculation(memory)}>=</button>
 };
 
-const Reset = (props) => {
+const Reset = ({reset}) => {
   return (
     <button
     className="reset-button"
-    onClick={props.reset}>C</button>
+    onClick={reset}>C</button>
   )
 }
 // Este codigo suma dos numeros
-const Operator = props => {
+const Operator = ({operator,resetActual,operation}) => {
   return (
     <button
-    style={{backgroundColor: props.operator == "icon" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
+    style={{backgroundColor: operator == "icon" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
     onClick={() => {
-      props.operation(props.operator);
-      props.resetActual;
+      operation(operator);
+      resetActual;
       }}>
-      {props.operator == "icon" ?
+      {operator == "icon" ?
       <i className="fa-solid fa-delete-left"></i> :
-      props.operator == "/" ? 
+      operator == "/" ? 
       "÷" :
-      props.operator}
+      operator}
     </button>
   )
 }
@@ -148,7 +148,8 @@ const result = str.match(/\D+\d+(\.\d+)?/g)
   
   return result
 }
-//5-8+13-(5*(48515/71)*47)+(5/2)
+//5-8+13-(5*(48515/71)*47)+(5/2) = -160565.317 TRUE, funciona perfecto!
+
 // 2 + 3 * 2 = a: 10 false b: 8 true
 
 // Dividir por cero
