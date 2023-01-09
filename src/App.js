@@ -20,7 +20,7 @@ const Reset = ({reset}) => {
   )
 }
 
-const Operator = ({operator,resetActual,deleteButton,operation}) => {
+const Operator = ({operator,resetActual,operation}) => {
   return (
     <button
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
@@ -66,14 +66,10 @@ export default function App() {
     }
   }
 
-  function deleteButton() {
-    console.log("entra")
-    setMemory("")
-  }
 
   function operator(o) {
     if (o == "delete") {
-      setMemory(memory.slice(0));
+      setMemory(memory.slice(0,memory.length - 1));
     } 
     
     if (memory[0] === "" && o == "-") {
@@ -104,7 +100,7 @@ export default function App() {
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"delete"} operation={operator} resetActual={resetActual} deleteButton={deleteButton} />
+        <Operator operator={"delete"} operation={operator} resetActual={resetActual} />
         <Operator operator={"/"} operation={operator} resetActual={resetActual} />
         <Operator operator={"x"} operation={operator} resetActual={resetActual} />
         <Operator operator={"-"} operation={operator} resetActual={resetActual} />
