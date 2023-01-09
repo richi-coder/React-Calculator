@@ -21,12 +21,13 @@ const Reset = (props) => {
 const Operator = props => {
   return (
     <button className="number"
+    style={{backgroundColor: props.operator == "icon" ? "initial" : "transparent"}}
     id="operator"
     onClick={() => {
       props.operation(props.operator);
       props.resetActual;
       }}>
-      {props.operator}
+      {props.operator == "icon" ? <i className="fa-thin fa-delete-left"></i> : props.operator}
     </button>
   )
 }
@@ -88,11 +89,11 @@ export default function App() {
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"<"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"+"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"-"} operation={operator} resetActual={resetActual} />
-        <Operator operator={"x"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"icon"} operation={operator} resetActual={resetActual} />
         <Operator operator={"/"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"x"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"-"} operation={operator} resetActual={resetActual} />
+        <Operator operator={"+"} operation={operator} resetActual={resetActual} />
       </div>
       <div className="c-equals">
       <Reset reset={reset}/>

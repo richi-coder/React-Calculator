@@ -41,14 +41,14 @@ body {
 }
 
 #memory {
-  font-size: 1em;
+  font-size: 2em;
   margin: 0;
   padding: 0;
   color: rgba(255,255,255,.75);
 }
 
 #actual {
-  font-size: 2em;
+  font-size: 4em;
   margin: 0;
   padding: 0;
   color: rgb(255,255,255);
@@ -123,6 +123,7 @@ body {
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .reset-button {
@@ -130,4 +131,5 @@ body {
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
