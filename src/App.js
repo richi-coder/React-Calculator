@@ -20,7 +20,7 @@ const Reset = ({reset}) => {
   )
 }
 // Este codigo suma dos numeros
-const Operator = ({operator,resetActual,operation,deleteButton}) => {
+const Operator = ({operator,resetActual,deleteButton,operation}) => {
   return (
     <button
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
@@ -29,6 +29,7 @@ const Operator = ({operator,resetActual,operation,deleteButton}) => {
       if (operator == "delete") {
         deleteButton;
       } else {
+        console.log("no entra")
       operation(operator);
       resetActual;
       }
@@ -72,7 +73,7 @@ export default function App() {
 
   function deleteButton() {
     console.log("entra")
-    setMemory([memory.slice(0,memory.length)])
+    //setMemory([memory.slice(0,memory.length)])
   }
 
   function operator(o) {
