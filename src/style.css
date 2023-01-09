@@ -110,3 +110,22 @@ body {
   50% {color: gray}
   100% {color: white}
 }
+
+.c-equals {
+  display: grid;
+  gap: 10px;
+}
+
+.equals-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.reset-button {
+  background-color: orangered;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}

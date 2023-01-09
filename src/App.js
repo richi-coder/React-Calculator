@@ -5,12 +5,16 @@ import { Display } from "./Display.js"
 import { Number } from "./Number.js"
 import { Message } from "./Message.js"
 const Equals = (props) => {
-  return <button onClick={() => calculation(props.memory)}>=</button>
+  return <button
+  className="equals-button"
+  onClick={() => calculation(props.memory)}>=</button>
 };
 
 const Reset = (props) => {
   return (
-    <button onClick={props.reset}>C</button>
+    <button
+    className="reset-button"
+    onClick={props.reset}>C</button>
   )
 }
 // Este codigo suma dos numeros
@@ -90,8 +94,10 @@ export default function App() {
         <Operator operator={"x"} operation={operator} resetActual={resetActual} />
         <Operator operator={"/"} operation={operator} resetActual={resetActual} />
       </div>
-      <Equals memory={memory} />
+      <div className="c-equals">
       <Reset reset={reset}/>
+      <Equals memory={memory} />
+      </div>
       </div>
       <br />
     </div>
