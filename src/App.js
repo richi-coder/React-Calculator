@@ -45,14 +45,13 @@ export default function App() {
   const [displayState, setDisplayState] = useState(false);
 
   useEffect(() => {
+    setDisplayState(false);
     setZero(false);
     if (/\/0/g.test(memory.join(""))) {
       setZero(true);
     } else {
       setActual(calculation(memory,displayState));
     }
-    //setDisplayState(false);
-    console.log("si corre")
   }, [memory]);
 
   function handleEnter(e) {
@@ -95,13 +94,12 @@ export default function App() {
   }
  
   function resetMemory() {
-    setDisplayState(true)
-    setMemory([...memory])
+    setDisplayState(true);
   }
 
   return (
     <div className="calculator">
-      <Display memory={memory} actual={actual}/>
+      <Display memory={memory} actual={actual} displayState={displayState} />
       <div className="display-message">
       <Message zero={zero}/>
       </div>
@@ -125,8 +123,8 @@ export default function App() {
   );
 }
 
-function calculation(memory,displayState) {
-  if (typeof memory[memory.length - 1] == "string" || memory.length == 1 || displayState == true) return "";
+function calculation(memory) {
+  if (typeof memory[memory.length - 1] == "string" || memory.length == 1) return "";
 let str = "+" + memory.join("");
 //let str = "100/2/2/5/5+2+6/3+8x2-4x2x5+100/2"
 const howManyDivs = str.match(/(\/)/g) // solo cuantos simbolos hay: 5
