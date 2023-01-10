@@ -16,6 +16,9 @@ export const Number = ({handleEnter}) => {
           </button>
         );
       })}
+      <button
+      className="number"
+      >.</button>
     </div>
   );
 };
