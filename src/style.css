@@ -123,6 +123,11 @@ body {
   100% {color: white}
 }
 
+#myId {
+  color: white;
+  font-family: monospace;
+}
+
 .display-message {
   width: 100%;
   margin: 0;

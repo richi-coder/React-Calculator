@@ -107,6 +107,7 @@ export default function App() {
     <div className="calculator">
       <Display memory={memory} actual={actual} displayState={displayState} />
       <div className="display-message">
+        <div id="myId"></div>
       <Message zero={zero}/>
       </div>
       <br />
