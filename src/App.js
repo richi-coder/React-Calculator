@@ -56,12 +56,7 @@ export default function App() {
 
   function handleEnter(e) {
     const { target } = e;
-    /*
-    if (actual == 0) {
-      setActual(e.target.value.toString())
-    } else {
-      setActual(actual + e.target.value.toString());
-    }*/
+
     if (memory[0] == 0 || memory[0] == "-"){
       setMemory([parseInt(target.value)])
     } else {
@@ -134,7 +129,6 @@ let multiplication = 1;
 let whichDiv = [];
 let whichMult = [];
 // BEFORE DIVISIONS, DIVIDING BY ZERO
-  //if (/\/0/g.test(str)) setMemory("hi")
 // DIVISIONS
 if (howManyDivs !== null) {
 for (let i = 0; i < howManyDivs.length; i++) {
@@ -160,6 +154,7 @@ const result = str.match(/\D+\d+(\.\d+)?/g)
   
   return /\.0{3}/.test(result) ? parseInt(result.toString()) : result;
 }
+
 //5-8+13-(5*(48515/71)*47)+(5/2) = -160565.317 TRUE, funciona perfecto!
 
 // 2 + 3 * 2 = a: 10 false b: 8 true
