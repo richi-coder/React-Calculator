@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Display = ({memory,actual}) => {
+export const Display = ({memory,actual,displayState}) => {
   return (
     <div className="display">
       <div id="memory">{memory}</div>

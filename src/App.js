@@ -6,7 +6,7 @@ import { Number } from "./Number.js"
 import { Message } from "./Message.js"
 
 
-const Equals = ({displayState,resetMemory}) => {
+const Equals = ({resetMemory}) => {
   return <button
   className="equals-button"
   onClick={resetMemory}>=</button>
@@ -39,7 +39,7 @@ const Operator = ({operator,operation,memory}) => {
 }
 
 export default function App() {
-  const [memory, setMemory] = useState([""]);
+  const [memory, setMemory] = useState([""] || actual);
   const [actual, setActual] = useState("");
   const [zero, setZero] = useState(false);
   const [displayState, setDisplayState] = useState(false);
@@ -49,8 +49,10 @@ export default function App() {
     if (/\/0/g.test(memory.join(""))) {
       setZero(true);
     } else {
-      setActual(calculation(memory));
+      setActual(calculation(memory,displayState));
     }
+    //setDisplayState(false);
+    console.log("si corre")
   }, [memory]);
 
   function handleEnter(e) {
@@ -93,10 +95,10 @@ export default function App() {
   }
  
   function resetMemory() {
-    setActual(memory);
-    console.log(actual)
-    //setMemory([""]);
+    setDisplayState(true)
+    setMemory([...memory])
   }
+
   return (
     <div className="calculator">
       <Display memory={memory} actual={actual}/>
@@ -123,8 +125,8 @@ export default function App() {
   );
 }
 
-function calculation(memory) {
-  if (typeof memory[memory.length - 1] == "string" || memory.length == 1) return "";
+function calculation(memory,displayState) {
+  if (typeof memory[memory.length - 1] == "string" || memory.length == 1 || displayState == true) return "";
 let str = "+" + memory.join("");
 //let str = "100/2/2/5/5+2+6/3+8x2-4x2x5+100/2"
 const howManyDivs = str.match(/(\/)/g) // solo cuantos simbolos hay: 5
