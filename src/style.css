@@ -119,6 +119,13 @@ body {
   100% {color: white}
 }
 
+.display-message {
+  width: 100%;
+  margin: 0;
+  background-color: black;
+  height: 15px;
+}
+
 .c-equals {
   display: grid;
   gap: 10px;
