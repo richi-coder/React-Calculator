@@ -30,7 +30,7 @@ body {
   padding: 0;
   margin: 0;
   background-color: black;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 9 / 15;
 }
 
 .display {
@@ -47,14 +47,14 @@ body {
 }
 
 #memory {
-  font-size: 2em;
+  font-size: 200%;
   margin: 0;
   padding: 0;
   color: rgba(255,255,255,.75);
 }
 
 #actual {
-  font-size: 4em;
+  font-size: 400%;
   margin: 0;
   padding: 0;
   color: rgb(255,255,255);
