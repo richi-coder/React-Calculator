@@ -39,7 +39,7 @@ const Operator = ({operator,operation,memory}) => {
 }
 
 export default function App() {
-  const [memory, setMemory] = useState([""] || actual);
+  const [memory, setMemory] = useState([""]);
   const [actual, setActual] = useState("");
   const [zero, setZero] = useState(false);
   const [displayState, setDisplayState] = useState(false);
