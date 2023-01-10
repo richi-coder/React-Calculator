@@ -56,14 +56,16 @@ export default function App() {
 
   function handleEnter(e) {
     const { target } = e;
+    console.log(target.value)
+    const newValue = target.value == "." ? "." : parseInt(target.value);
 
     if (memory[0] == 0 || memory[0] == "-"){
-      setMemory([parseInt(target.value)])
+      setMemory([newValue])
     } else if (displayState) {
-      setMemory([actual,parseInt(target.value)]);
+      setMemory([actual,newValue]);
       setDisplayState(false);
     } else {
-      setMemory([...memory,parseInt(target.value)])
+      setMemory([...memory,newValue])
     }
   }
 

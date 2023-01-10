@@ -18,6 +18,8 @@ export const Number = ({handleEnter}) => {
       })}
       <button
       className="number"
+      onClick={handleEnter}
+      value="."
       >.</button>
     </div>
   );
