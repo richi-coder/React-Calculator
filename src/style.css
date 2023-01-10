@@ -11,7 +11,7 @@ p {
 }
 
 body {
-  background: #00AAFF;
+  background: black;
   padding: 0;
   margin: 0;
 }
@@ -138,7 +138,7 @@ body {
   width: 100%;
   margin: 0;
   background-color: black;
-  height: 20%;
+  height: 10%;
 }
 
 .c-equals {
@@ -167,6 +167,9 @@ body {
 }
 
 @media only screen and (min-width: 500px) {
+  body {
+    background: #00AAFF;
+  }
   .calculator {
     width: 25%;
   }
