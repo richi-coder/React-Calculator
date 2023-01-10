@@ -10,6 +10,7 @@ export const Number = ({handleEnter}) => {
           key={i}
           onClick={handleEnter}
           className="number"
+          id={numbers.length - i - 1}
           value={numbers.length - i - 1}
           >
             {numbers.length - i - 1}
