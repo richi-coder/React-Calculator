@@ -69,9 +69,6 @@ export default function App() {
 
 
   function operator(o) {
-    if (displayState) {
-      setMemory([...actual],)
-    }
     if (o == "delete" && memory.length > 1) {
       setMemory(memory.slice(0,memory.length - 1));
     } else if (o == "delete" && memory.length == 1) {
@@ -81,11 +78,17 @@ export default function App() {
     if (memory[0] === "" && o == "-") {
       setMemory([...memory,o])
     }
+    if (displayState) {
+      setMemory([...actual,o])
+      setDisplayState(false);
+    } else {
+
     if (typeof memory[memory.length - 1] == "number" && o != "delete") {
       setMemory([...memory,o])
     } else if (typeof memory[memory.length - 1] != "number" && o != "delete") {
       const copy = memory.slice(0,memory.length - 1);
       setMemory([...copy,o])
+    }
     }
     // Prevents entering operator symbols many times
   }
