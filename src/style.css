@@ -85,6 +85,10 @@ body {
   color: white;
 }
 
+#zero {
+  order: 1;
+}
+
 .operators {
   display: flex;
   flex-direction: column;
