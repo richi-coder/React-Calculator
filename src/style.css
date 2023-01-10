@@ -116,6 +116,7 @@ body {
   animation: titila 1s ease-in-out infinite;
   color: white;
   display: none;
+  font-size: 1em;
 }
 @keyframes titila {
   0% {color: white}
@@ -132,7 +133,7 @@ body {
   width: 100%;
   margin: 0;
   background-color: black;
-  height: 15px;
+  height: 30px;
 }
 
 .c-equals {
