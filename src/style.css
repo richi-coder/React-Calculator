@@ -6,14 +6,14 @@ p {
 
 * {
   box-sizing: border-box;
-  /* la cagada */
-  /* Hay que darle puro commit */
 }
 
 body {
   background: black;
   padding: 0;
   margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 #root {
@@ -21,6 +21,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .calculator {
@@ -146,6 +148,7 @@ body {
   gap: 10px;
   width: 15%;
   padding: 0 5px 0;
+  margin-right: 5px;
 }
 
 .equals-button {
