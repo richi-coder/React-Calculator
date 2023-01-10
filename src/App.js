@@ -158,7 +158,7 @@ const result = str.match(/\D+\d+(\.\d+)?/g)
                     .toFixed(3);
 //----------------------------
   
-  return /\.\d{3}/.test(result.toString()) ? parseInt(result) : result;
+  return /\.0{3}/.test(result) ? parseInt(result.toString()) : result;
 }
 //5-8+13-(5*(48515/71)*47)+(5/2) = -160565.317 TRUE, funciona perfecto!
 
