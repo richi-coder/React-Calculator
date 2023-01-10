@@ -59,6 +59,9 @@ export default function App() {
 
     if (memory[0] == 0 || memory[0] == "-"){
       setMemory([parseInt(target.value)])
+    } else if (displayState) {
+      setMemory([...actual,parseInt(target.value)]);
+      setDisplayState(false);
     } else {
       setMemory([...memory,parseInt(target.value)])
     }
@@ -66,6 +69,9 @@ export default function App() {
 
 
   function operator(o) {
+    if (displayState) {
+      setMemory([...actual],)
+    }
     if (o == "delete" && memory.length > 1) {
       setMemory(memory.slice(0,memory.length - 1));
     } else if (o == "delete" && memory.length == 1) {
