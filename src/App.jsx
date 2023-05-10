@@ -51,25 +51,33 @@ export default function App() {
   useEffect(() => {
     setDisplayState(false);
     setZero(false);
-    console.log(/\/0/g.test(memory.join("")), 'test');
+    //console.log(/\/0/g.test(memory.join("")), 'test');
 
-    if (/\/0/g.test(memory.join(""))) {
-      setZero(true);
-    } else if (memory[0] === ''){
-      setMemory([0])
-    }
-    else {
-      setActual(calculation(memory));
-    }
+    // if (/\/0/g.test(memory.join(""))) {
+    //   setZero(true);
+    // } else if (memory[0] === ''){
+    //   setMemory([0])
+    // }
+    // else {
+    //   setActual(calculation(memory));
+    // }
   }, [memory]);
 
-  function handleEnter(e) {
+  function handleEnter(e) { // For numbers and point
     const { target } = e;
-    if (/\.\d+\./g.test(memory.join('')+target.value) || /\.{2,}/.test(memory.join('')) || memory[memory.length - 1] === '.' && target.value === '.' || memory[memory.length - 1] === '..' || target.value === '..') return
+    // Avoiding multiple points
+    if (/\.\d+\./g.test(memory.join('') + target.value) || memory[memory.length - 1] === '.' && target.value === '.') return
+    // 
+    if (/\+$|\-$|\*$|\/$/.test(actual)) {
+      setActual(target.value)
+    } else {
+      setActual(actual + target.value)
+    }
     
     const newValue = target.value == "." ? "." : parseInt(target.value);
-
-    if (memory[0] == '0'){
+    
+    // If memory is empty (I mean, if there is a zero only)
+    if (memory[0] == '0' && memory.length == 1){
       setMemory([newValue])
     } else if (displayState) {
       setMemory([actual,newValue]);
@@ -81,22 +89,30 @@ export default function App() {
 
 
   function operator(o) {
+    setActual(o)
+    // If = in the expression when entering operator, substitutes equales by the operator to continue calc
+    if (/=/.test(memory[0])) {
+      setMemory([...memory[0].match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], o])
+      return
+    };
+    // Normal delete when length is more than 1
     if (o == "delete" && memory.length > 1) {
       setMemory(memory.slice(0,memory.length - 1));
       return
     } 
+    // Delete and put to 0 when length is 1
     if (o == "delete" && memory.length == 1) {
       setMemory([0]);
       return
     }
-    
-    if (memory[0] == '0' && o == "-") {
+    // Start expression with minus operator
+    if (memory[0] == '0' && memory.length === 1 && o == "-") {
       setMemory(['-'])
       return
     }
     if (displayState) {
       setMemory([actual,o])
-      setDisplayState(false);
+      setDisplayState(true);
     } else {
           // If entering - after + - or /
           if (memory[memory.length - 1] != 'number' && memory[memory.length - 1] != '-' && o == '-') {
@@ -122,8 +138,11 @@ export default function App() {
   }
  
   function resetMemory() {
-    setMemory([calculation(memory)])
-    setDisplayState(true);
+    if (!/=/.test(memory.join(''))) {
+      setMemory([calculation(memory)])
+      setActual(calculation(memory).match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], 'ACCT')
+      setDisplayState(true);
+    }
   }
 
   return (

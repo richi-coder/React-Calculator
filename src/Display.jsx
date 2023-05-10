@@ -1,5 +1,4 @@
 export const Display = ({memory,actual,displayState}) => {
-  console.log(memory.join(''), 'from DISPLAY');
   return (
     <div className="display">
       <div
