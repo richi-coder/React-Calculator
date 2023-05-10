@@ -8,6 +8,7 @@ import { Message } from "./Message.js"
 
 const Equals = ({resetMemory}) => {
   return <button
+  id='equals'
   className="equals-button"
   onClick={resetMemory}>=</button>
 };
