@@ -37,6 +37,7 @@ export const Number = ({handleEnter}) => {
       className="number"
       onClick={handleEnter}
       value="."
+      id="decimal"
       >.</button>
     </div>
   );

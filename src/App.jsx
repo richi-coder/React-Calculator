@@ -1,8 +1,9 @@
 import './style.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Display } from "./Display"
 import { Number } from "./Number"
 import { Message } from "./Message"
+import { calculation } from './calculation';
 
 
 const Equals = ({resetMemory}) => {
@@ -16,6 +17,7 @@ const Reset = ({reset}) => {
   return (
     <button
     className="reset-button"
+    id='clear'
     onClick={reset}>C</button>
   )
 }
@@ -26,6 +28,7 @@ const Operator = ({operator,operation,memory}) => {
     disabled={(operator == "delete" && memory == [""]) ? true : false}
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
+    id={operator === '+' ? 'add' : operator === '-' ? 'subtract' : operator === '/' ? 'divide' : operator === 'x' ? 'multiply' : operator}
     onClick={() => {
       operation(operator);
       }}>
@@ -39,7 +42,7 @@ const Operator = ({operator,operation,memory}) => {
 }
 
 export default function App() {
-  const [memory, setMemory] = useState([""]);
+  const [memory, setMemory] = useState(["0"]);
   const [actual, setActual] = useState("");
   const [zero, setZero] = useState(false);
   const [displayState, setDisplayState] = useState(false);
@@ -47,19 +50,25 @@ export default function App() {
   useEffect(() => {
     setDisplayState(false);
     setZero(false);
+    console.log(/\/0/g.test(memory.join("")), 'test');
+
     if (/\/0/g.test(memory.join(""))) {
       setZero(true);
-    } else {
-      setActual(calculation(memory,displayState));
+    } else if (memory[0] === ''){
+      setMemory([0])
+    }
+    else {
+      setActual(calculation(memory));
     }
   }, [memory]);
 
   function handleEnter(e) {
     const { target } = e;
-    console.log(target.value)
+    if (/\.{2}/.test(memory.join('')) || memory[memory.length - 1] === '.' && target.value === '.' || memory[memory.length - 1] === '..' || target.value === '..') return
+    
     const newValue = target.value == "." ? "." : parseInt(target.value);
 
-    if (memory[0] == 0 || memory[0] == "-"){
+    if (memory[0] == '0'){
       setMemory([newValue])
     } else if (displayState) {
       setMemory([actual,newValue]);
@@ -73,33 +82,46 @@ export default function App() {
   function operator(o) {
     if (o == "delete" && memory.length > 1) {
       setMemory(memory.slice(0,memory.length - 1));
-    } else if (o == "delete" && memory.length == 1) {
-      setMemory([""]);
+      return
+    } 
+    if (o == "delete" && memory.length == 1) {
+      setMemory([0]);
+      return
     }
     
-    if (memory[0] === "" && o == "-") {
-      setMemory([...memory,o])
+    if (memory[0] == '0' && o == "-") {
+      setMemory(['-'])
+      return
     }
     if (displayState) {
       setMemory([actual,o])
       setDisplayState(false);
     } else {
+          // If entering - after + - or /
+          if (memory[memory.length - 1] != 'number' && memory[memory.length - 1] != '-' && o == '-') {
+            setMemory([...memory, o])
+            return
+          }
 
-    if (typeof memory[memory.length - 1] == "number" && o != "delete") {
-      setMemory([...memory,o])
-    } else if (typeof memory[memory.length - 1] != "number" && o != "delete") {
-      const copy = memory.slice(0,memory.length - 1);
-      setMemory([...copy,o])
-    }
+          // If entering + x - / after number, it does it
+          if (typeof memory[memory.length - 1] == "number" && o != "delete") {
+            setMemory([...memory,o])
+            // else if entering + x - / after non number, just changes the last operator
+          } else if (typeof memory[memory.length - 1] != "number" && o != "delete") {
+            const copy = memory.slice(0,memory.length - 1);
+            setMemory([...copy,o])
+          }
     }
     // Prevents entering operator symbols many times
   }
+  
   function reset() {
     setActual("");
     setMemory([""]);
   }
  
   function resetMemory() {
+    setMemory([calculation(memory)])
     setDisplayState(true);
   }
 
@@ -129,43 +151,6 @@ export default function App() {
       <br />
     </div>
   );
-}
-
-function calculation(memory) {
-  if (typeof memory[memory.length - 1] == "string" || memory.length == 1) return "";
-let str = "+" + memory.join("");
-//let str = "100/2/2/5/5+2+6/3+8x2-4x2x5+100/2"
-const howManyDivs = str.match(/(\/)/g) // solo cuantos simbolos hay: 5
-const howManyMult = str.match(/(x)/g) // solo cuantos simbolos hay: 5
-let division = 1;
-let multiplication = 1;
-let whichDiv = [];
-let whichMult = [];
-// BEFORE DIVISIONS, DIVIDING BY ZERO
-// DIVISIONS
-if (howManyDivs !== null) {
-for (let i = 0; i < howManyDivs.length; i++) {
-    whichDiv = str.match(/\d+(\.\d+)?(\/)\d+(\.\d+)?/)[0].split("/")
-    division = (parseFloat(whichDiv[0])/parseFloat(whichDiv[1])).toString();
-    str = str.replace(whichDiv.join("/"),division);
-}
-}
-// MULTIPLICATIONS
-if (howManyMult !== null) {
-for (let i = 0; i < howManyMult.length; i++) {
-    whichMult = str.match(/\d+(\.\d+)?(x)\d+(\.\d+)?/)[0].split("x");
-    multiplication = (parseFloat(whichMult[0])*parseFloat(whichMult[1])).toString();
-    str = str.replace(whichMult.join("x"),multiplication);
-}
-}
-// TOTAL SUM
-const result = str.match(/\D+\d+(\.\d+)?/g)
-                    .map(x => parseFloat(x))
-                    .reduce((e,acum) => e + acum, 0)
-                    .toFixed(3);
-//----------------------------
-  
-  return /\.0{3}/.test(result) ? parseInt(result.toString()) : result;
 }
 
 //5-8+13-(5*(48515/71)*47)+(5/2) = -160565.317 TRUE, funciona perfecto!
