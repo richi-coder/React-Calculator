@@ -3,18 +3,22 @@ export function calculation(memory) {
   let str =  memory.join("");
   console.log('initial', str);
   // Depuration
+  // Checking continuity
+  if (/=\+/.test(str)) {
+    str = str.replace(/=\+/, '+')
+    console.log('igualMAAAS');
+  }
   // Checking double .
   if (/\.{2,}/.test(str)) {
-    let change = str.math(/\.{2,}/)
     str = str.replace(/\.{2,}/, '.')
   }
   // Checking if there are x+ or x/
-  if (/x\+|x\//g.test(str)) {
-    let change = str.match(/x\+|x\//g)
+  if (/\*\+|\*\/|-\+|-\*|-\//.test(str)) {
+    let change = str.match(/\*\+|\*\//g)
     console.log(change, 'change');
     // Should check into for for many cases
     let finalOperator = change[0][change[0].length - 1]
-    str = str.replace(/x\+|x\//,finalOperator)
+    str = str.replace(/\*\+|\*\/|-\+|-\*|-\//,finalOperator)
     // for end
     console.log('pueppp', str, finalOperator);
   }
@@ -23,7 +27,7 @@ export function calculation(memory) {
 
 //******************/
   const howManyDivs = str.match(/(\/)/g) // solo cuantos simbolos hay: 5
-  const howManyMult = str.match(/(x)/g) // solo cuantos simbolos hay: 5
+  const howManyMult = str.match(/(\*)/g) // solo cuantos simbolos hay: 5
   let division = 1;
   let multiplication = 1;
   let whichDiv = [];
@@ -40,9 +44,9 @@ export function calculation(memory) {
   // MULTIPLICATIONS
   if (howManyMult !== null) {
       for (let i = 0; i < howManyMult.length; i++) { // for executes and go solving multiplications
-          whichMult = str.match(/-{0,}\d+(\.\d+)?(x)-{0,}\d+(\.\d+)?/)[0].split("x");
+          whichMult = str.match(/-{0,}\d+(\.\d+)?(\*)-{0,}\d+(\.\d+)?/)[0].split("*");
           multiplication = (parseFloat(whichMult[0])*parseFloat(whichMult[1])).toString();
-          str = str.replace(whichMult.join("x"),multiplication);
+          str = str.replace(whichMult.join("*"),multiplication);
       }
   } console.log('afterMULT', str);
   // TOTAL SUM
@@ -62,5 +66,5 @@ export function calculation(memory) {
 console.log('final', result);
   //----------------------------
     
-    return /\.0{4}/.test(result) ? parseInt(result.toString()) : result;
+    return /\.0{4}$/.test(result) ? parseInt(result.toString()) : /0+$/.test(result) ? result.replace(/0+$/,'') : result;
   }

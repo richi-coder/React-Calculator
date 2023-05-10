@@ -10,6 +10,7 @@ const Equals = ({resetMemory}) => {
   return <button
   id='equals'
   className="equals-button"
+  value='='
   onClick={resetMemory}>=</button>
 };
 
@@ -28,7 +29,7 @@ const Operator = ({operator,operation,memory}) => {
     disabled={(operator == "delete" && memory == [""]) ? true : false}
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
-    id={operator === '+' ? 'add' : operator === '-' ? 'subtract' : operator === '/' ? 'divide' : operator === 'x' ? 'multiply' : operator}
+    id={operator === '+' ? 'add' : operator === '-' ? 'subtract' : operator === '/' ? 'divide' : operator === '*' ? 'multiply' : operator}
     onClick={() => {
       operation(operator);
       }}>
@@ -64,7 +65,7 @@ export default function App() {
 
   function handleEnter(e) {
     const { target } = e;
-    if (/\.{2}/.test(memory.join('')) || memory[memory.length - 1] === '.' && target.value === '.' || memory[memory.length - 1] === '..' || target.value === '..') return
+    if (/\.\d+\./g.test(memory.join('')+target.value) || /\.{2,}/.test(memory.join('')) || memory[memory.length - 1] === '.' && target.value === '.' || memory[memory.length - 1] === '..' || target.value === '..') return
     
     const newValue = target.value == "." ? "." : parseInt(target.value);
 
@@ -116,8 +117,8 @@ export default function App() {
   }
   
   function reset() {
-    setActual("");
-    setMemory([""]);
+    setActual('');
+    setMemory([0]);
   }
  
   function resetMemory() {
@@ -139,7 +140,7 @@ export default function App() {
       <div className="operators">
         <Operator operator={"delete"} operation={operator} memory={memory}/>
         <Operator operator={"/"} operation={operator} />
-        <Operator operator={"x"} operation={operator} />
+        <Operator operator={"*"} operation={operator} />
         <Operator operator={"-"} operation={operator} />
         <Operator operator={"+"} operation={operator} />
       </div>
