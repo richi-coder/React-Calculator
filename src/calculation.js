@@ -8,6 +8,9 @@ export function calculation(memory) {
     // if (lastChar == "*" || lastChar == "/" || lastChar == "+" || lastChar == "-" ||  memory.length == 1) return '';
   let initialExpression = memory.join('');
   let str = memory.join("");
+  if (/\D+$/.test(str)) {
+    str = str.replace(/\D+$/,'')
+  }
   console.log('initial', str);
   // Depuration
       // Modify operator when
