@@ -8,8 +8,13 @@ export function calculation(memory) {
     // if (lastChar == "*" || lastChar == "/" || lastChar == "+" || lastChar == "-" ||  memory.length == 1) return '';
   let initialExpression = memory.join('');
   let str = memory.join("");
+  // Take off end symbols
   if (/\D+$/.test(str)) {
     str = str.replace(/\D+$/,'')
+  }
+  // Avoid division by zero
+  if (/\/0/.test(str)) {
+    return initialExpression + '= INFINITY'
   }
   console.log('initial', str);
   // Depuration

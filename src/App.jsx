@@ -62,39 +62,25 @@ export default function App() {
     }
     // Avoiding multiple points
     if (/\.\d+\./g.test(calcState.memory.join('') + target.value) || calcState.memory[calcState.memory.length - 1] === '.' && target.value === '.') return
-    // 
-    // if (/\+$|\-$|\*$|\/$/.test(calcState.actual)) {
-    //   setCalcState({
-    //     ...calcState,
-    //     actual: target.value
-    //   })
-    // } else {
-    //   setCalcState({
-    //     ...calcState,
-    //     actual: calcState.actual + target.value
-    //   })
-    // }
-    
-    const newValue = target.value == "." ? "." : parseInt(target.value);
     
     // If memory is empty (I mean, if there is a zero only)
     if (calcState.actual === '0' && calcState.memory.length == 1){
       setCalcState({
-        actual: newValue,
-        memory: [newValue]
+        actual: target.value,
+        memory: [target.value]
       })
     } else if (calcState.displayState) {
       setCalcState({
         ...calcState,
-        memory: [calcState.actual, newValue],
-        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? newValue : calcState.actual + target.value,
+        memory: [calcState.actual, target.value],
+        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
         displayState: false
       })
     } else {
       setCalcState({
         ...calcState,
-        memory: [...calcState.memory, newValue],
-        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? newValue : calcState.actual + target.value,
+        memory: [...calcState.memory, target.value],
+        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
       })
     }
   }
@@ -163,11 +149,19 @@ export default function App() {
     // If there is no equals at memory DISPLAY
     if (!/=/.test(calcState.memory.join(''))) {
       const resultantExpression = calculation(calcState.memory);
+      // Checking output expression
+      if (/INFINITY/.test(resultantExpression)) {
+        setCalcState({
+          memory: [resultantExpression],
+          actual: 'INFINITY',
+          displayState: false
+        })
+      } else {
       setCalcState({
         memory: [resultantExpression],
         actual: resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0],
         displayState: false
-      })
+      })}
     }
   }
 
