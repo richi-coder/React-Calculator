@@ -19,7 +19,7 @@ const Reset = ({reset}) => {
     <button
     className="reset-button"
     id='clear'
-    onClick={reset}>C</button>
+    onClick={reset}>AC</button>
   )
 }
 
@@ -43,121 +43,147 @@ const Operator = ({operator,operation,memory}) => {
 }
 
 export default function App() {
-  const [memory, setMemory] = useState(["0"]);
-  const [actual, setActual] = useState("");
-  const [zero, setZero] = useState(false);
-  const [displayState, setDisplayState] = useState(false);
-
-  useEffect(() => {
-    setDisplayState(false);
-    setZero(false);
-    //console.log(/\/0/g.test(memory.join("")), 'test');
-
-    // if (/\/0/g.test(memory.join(""))) {
-    //   setZero(true);
-    // } else if (memory[0] === ''){
-    //   setMemory([0])
-    // }
-    // else {
-    //   setActual(calculation(memory));
-    // }
-  }, [memory]);
+  const [calcState, setCalcState] = useState({
+    memory: [''],
+    actual: '0',
+    displayState: false,
+    zero: false
+  })
 
   function handleEnter(e) { // For numbers and point
     const { target } = e;
-    // Avoiding multiple points
-    if (/\.\d+\./g.test(memory.join('') + target.value) || memory[memory.length - 1] === '.' && target.value === '.') return
-    // 
-    if (/\+$|\-$|\*$|\/$/.test(actual)) {
-      setActual(target.value)
-    } else {
-      setActual(actual + target.value)
+    // Avoid entering multiple zeros at first
+    if (/^0{2,}/.test(calcState.actual + target.value)) {
+      setCalcState({
+        ...calcState,
+        memory: ['0']
+      })
+      return
     }
+    // Avoiding multiple points
+    if (/\.\d+\./g.test(calcState.memory.join('') + target.value) || calcState.memory[calcState.memory.length - 1] === '.' && target.value === '.') return
+    // 
+    // if (/\+$|\-$|\*$|\/$/.test(calcState.actual)) {
+    //   setCalcState({
+    //     ...calcState,
+    //     actual: target.value
+    //   })
+    // } else {
+    //   setCalcState({
+    //     ...calcState,
+    //     actual: calcState.actual + target.value
+    //   })
+    // }
     
     const newValue = target.value == "." ? "." : parseInt(target.value);
     
     // If memory is empty (I mean, if there is a zero only)
-    if (memory[0] == '0' && memory.length == 1){
-      setMemory([newValue])
-    } else if (displayState) {
-      setMemory([actual,newValue]);
-      setDisplayState(false);
+    if (calcState.actual === '0' && calcState.memory.length == 1){
+      setCalcState({
+        actual: newValue,
+        memory: [newValue]
+      })
+    } else if (calcState.displayState) {
+      setCalcState({
+        ...calcState,
+        memory: [calcState.actual, newValue],
+        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? newValue : calcState.actual + target.value,
+        displayState: false
+      })
     } else {
-      setMemory([...memory,newValue])
+      setCalcState({
+        ...calcState,
+        memory: [...calcState.memory, newValue],
+        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? newValue : calcState.actual + target.value,
+      })
     }
   }
 
 
   function operator(o) {
-    setActual(o)
+  
     // If = in the expression when entering operator, substitutes equales by the operator to continue calc
-    if (/=/.test(memory[0])) {
-      setMemory([...memory[0].match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], o])
+    if (/=/.test(calcState.memory[0])) {
+      setCalcState({
+        ...calcState,
+        memory: [...calcState.memory[0].match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], o],
+        actual: o
+      })
       return
     };
-    // Normal delete when length is more than 1
-    if (o == "delete" && memory.length > 1) {
-      setMemory(memory.slice(0,memory.length - 1));
-      return
-    } 
-    // Delete and put to 0 when length is 1
-    if (o == "delete" && memory.length == 1) {
-      setMemory([0]);
+    if (calcState.memory[0] == '' && calcState.memory.length === 1 && o == "-") {
+      setCalcState({
+        ...calcState,
+        memory: ['-'],
+        actual: o
+      })
       return
     }
-    // Start expression with minus operator
-    if (memory[0] == '0' && memory.length === 1 && o == "-") {
-      setMemory(['-'])
+    // If entering - after + - x or / ALLOW
+    if (o == '-' && (calcState.memory[calcState.memory.length - 1] === '+' || calcState.memory[calcState.memory.length - 1] === '*' || calcState.memory[calcState.memory.length - 1] === '/')) {
+      setCalcState({
+        ...calcState,
+        memory: [...calcState.memory, o],
+        actual: o
+      })
       return
     }
-    if (displayState) {
-      setMemory([actual,o])
-      setDisplayState(true);
-    } else {
-          // If entering - after + - or /
-          if (memory[memory.length - 1] != 'number' && memory[memory.length - 1] != '-' && o == '-') {
-            setMemory([...memory, o])
-            return
-          }
+    // Avoid entering the same symbol
+    if (o === calcState.memory[calcState.memory.length - 1]) {
+      return
+    }
+    if (/\D{2,}$/.test(calcState.memory.join('') + o)) {
+      let memoryString = calcState.memory.join('') + o
+      let value = memoryString.replace(memoryString.match(/\D{2,}$/), o)
+      setCalcState({
+        ...calcState,
+        memory: [value],
+        actual: o
+      })
+      return
+    }
 
-          // If entering + x - / after number, it does it
-          if (typeof memory[memory.length - 1] == "number" && o != "delete") {
-            setMemory([...memory,o])
-            // else if entering + x - / after non number, just changes the last operator
-          } else if (typeof memory[memory.length - 1] != "number" && o != "delete") {
-            const copy = memory.slice(0,memory.length - 1);
-            setMemory([...copy,o])
-          }
-    }
-    // Prevents entering operator symbols many times
+    console.log('SALEEEE');
+    setCalcState({
+      ...calcState,
+      memory: [...calcState.memory, o],
+      actual: o
+    })
+
   }
   
   function reset() {
-    setActual('');
-    setMemory([0]);
+    setCalcState({
+      actual: '0',
+      memory: ['']
+    })
   }
  
   function resetMemory() {
-    if (!/=/.test(memory.join(''))) {
-      setMemory([calculation(memory)])
-      setActual(calculation(memory).match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], 'ACCT')
-      setDisplayState(true);
+    // If there is no equals at memory DISPLAY
+    if (!/=/.test(calcState.memory.join(''))) {
+      const resultantExpression = calculation(calcState.memory);
+      setCalcState({
+        memory: [resultantExpression],
+        actual: resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0],
+        displayState: false
+      })
     }
   }
 
   return (
     <div className="calculator">
       
-      <Display memory={memory} actual={actual} displayState={displayState} />
+      <Display memory={calcState.memory} actual={calcState.actual} displayState={calcState.displayState} />
       <div className="display-message">
         <div id="myId">Richi Coder</div>
-      <Message zero={zero}/>
+      <Message zero={calcState.zero}/>
       </div>
       <br />
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"delete"} operation={operator} memory={memory}/>
+        <Operator operator={"delete"} operation={operator} memory={calcState.memory}/>
         <Operator operator={"/"} operation={operator} />
         <Operator operator={"*"} operation={operator} />
         <Operator operator={"-"} operation={operator} />
@@ -165,7 +191,7 @@ export default function App() {
       </div>
       <div className="c-equals">
       <Reset reset={reset} />
-      <Equals memory={memory} resetMemory={resetMemory} displayState={displayState} />
+      <Equals memory={calcState.memory} resetMemory={resetMemory} displayState={calcState.displayState} />
       </div>
       </div>
       <br />

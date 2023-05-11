@@ -1,11 +1,11 @@
 export const Display = ({memory,actual,displayState}) => {
   return (
-    <div className="display">
+    <div className="screen">
       <div
       style={{visibility: displayState ? "hidden" : "visible"}} 
-      id="display">{memory.join('')}
+      id="actual">{memory.join('')}
       </div>
-      <div id="actual">{actual}</div>
+      <div id="display">{actual}</div>
     </div>
   );
 };
