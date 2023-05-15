@@ -44,10 +44,8 @@ const Operator = ({operator,operation,memory}) => {
 
 export default function App() {
   const [calcState, setCalcState] = useState({
-    memory: [''],
-    actual: '0',
-    displayState: false,
-    zero: false
+    memory: '',
+    actual: 0,
   })
 
   function handleEnter(e) { // For numbers and point
@@ -56,30 +54,27 @@ export default function App() {
     if (/^0{2,}/.test(calcState.actual + target.value)) {
       setCalcState({
         ...calcState,
-        memory: ['0']
+        memory: 0
       })
       return
     }
     // Avoiding multiple points
-    if (/\.\d+\./g.test(calcState.memory.join('') + target.value) || calcState.memory[calcState.memory.length - 1] === '.' && target.value === '.') return
+    if (/\.\d+\./g.test(calcState.memory + target.value) || calcState.memory[calcState.memory.length - 1] === '.' && target.value === '.') return
+
+    // If equals symbols present in the memory expression
+    if (/=/.test(calcState.memory)) {
+      return
+    }
     
     // If memory is empty (I mean, if there is a zero only)
-    if (calcState.actual === '0' && calcState.memory.length == 1){
+    if (calcState.actual === 0){
       setCalcState({
         actual: target.value,
-        memory: [target.value]
-      })
-    } else if (calcState.displayState) {
-      setCalcState({
-        ...calcState,
-        memory: [calcState.actual, target.value],
-        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
-        displayState: false
+        memory: target.value
       })
     } else {
       setCalcState({
-        ...calcState,
-        memory: [...calcState.memory, target.value],
+        memory: calcState.memory + target.value,
         actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
       })
     }
@@ -89,18 +84,16 @@ export default function App() {
   function operator(o) {
   
     // If = in the expression when entering operator, substitutes equales by the operator to continue calc
-    if (/=/.test(calcState.memory[0])) {
+    if (/=/.test(calcState.memory)) {
       setCalcState({
-        ...calcState,
-        memory: [...calcState.memory[0].match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0], o],
+        memory: calcState.memory.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0] + o,
         actual: o
       })
       return
     };
-    if (calcState.memory[0] == '' && calcState.memory.length === 1 && o == "-") {
+    if (calcState.memory == '' && o == "-") {
       setCalcState({
-        ...calcState,
-        memory: ['-'],
+        memory: '-',
         actual: o
       })
       return
@@ -108,8 +101,7 @@ export default function App() {
     // If entering - after + - x or / ALLOW
     if (o == '-' && (calcState.memory[calcState.memory.length - 1] === '+' || calcState.memory[calcState.memory.length - 1] === '*' || calcState.memory[calcState.memory.length - 1] === '/')) {
       setCalcState({
-        ...calcState,
-        memory: [...calcState.memory, o],
+        memory: calcState.memory + o,
         actual: o
       })
       return
@@ -118,21 +110,18 @@ export default function App() {
     if (o === calcState.memory[calcState.memory.length - 1]) {
       return
     }
-    if (/\D{2,}$/.test(calcState.memory.join('') + o)) {
-      let memoryString = calcState.memory.join('') + o
+    if (/\D{2,}$/.test(calcState.memory + o)) {
+      let memoryString = calcState.memory + o
       let value = memoryString.replace(memoryString.match(/\D{2,}$/), o)
       setCalcState({
-        ...calcState,
-        memory: [value],
+        memory: value,
         actual: o
       })
       return
     }
 
-    console.log('SALEEEE');
     setCalcState({
-      ...calcState,
-      memory: [...calcState.memory, o],
+      memory: calcState.memory + o,
       actual: o
     })
 
@@ -140,38 +129,38 @@ export default function App() {
   
   function reset() {
     setCalcState({
-      actual: '0',
-      memory: ['']
+      actual: 0,
+      memory: ''
     })
   }
  
   function resetMemory() {
     // If there is no equals at memory DISPLAY
-    if (!/=/.test(calcState.memory.join(''))) {
-      const resultantExpression = calculation(calcState.memory);
+    if (!/=/.test(calcState.memory)) {
+      const resultantExpression = calculation(calcState.memory+'=');
+      
       // Checking output expression
       if (/INFINITY/.test(resultantExpression)) {
         setCalcState({
-          memory: [resultantExpression],
+          memory: resultantExpression,
           actual: 'INFINITY',
-          displayState: false
         })
       } else {
       setCalcState({
-        memory: [resultantExpression],
+        memory: resultantExpression,
         actual: resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0],
-        displayState: false
       })}
+      console.log(document.getElementById('display').innerHTML, 'vanilla')
     }
   }
 
   return (
     <div className="calculator">
       
-      <Display memory={calcState.memory} actual={calcState.actual} displayState={calcState.displayState} />
+      <Display memory={calcState.memory} actual={calcState.actual} />
       <div className="display-message">
         <div id="myId">Richi Coder</div>
-      <Message zero={calcState.zero}/>
+      <Message />
       </div>
       <br />
       <div className="buttons">
@@ -185,7 +174,7 @@ export default function App() {
       </div>
       <div className="c-equals">
       <Reset reset={reset} />
-      <Equals memory={calcState.memory} resetMemory={resetMemory} displayState={calcState.displayState} />
+      <Equals resetMemory={resetMemory} />
       </div>
       </div>
       <br />

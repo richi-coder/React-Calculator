@@ -1,9 +1,8 @@
-export const Display = ({memory,actual,displayState}) => {
+export const Display = ({memory,actual}) => {
   return (
     <div className="screen">
       <div
-      style={{visibility: displayState ? "hidden" : "visible"}} 
-      id="actual">{memory.join('')}
+      id="actual">{memory}
       </div>
       <div id="display">{actual}</div>
     </div>
