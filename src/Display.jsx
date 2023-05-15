@@ -1,13 +1,20 @@
-export const Display = ({memory,actual, memoryRef, displayRef, test}) => {
-  console.log(test);
+import { useEffect } from "react";
+
+export const Display = ({memoryRef, displayRef }) => {
+
+  useEffect(() => {
+   memoryRef.current.innerHTML = '';
+    displayRef.current.innerHTML = 0
+  }, [])
+  
 
   return (
     <div className="screen">
       <div
       ref={memoryRef}
-      id="actual">{memory}
+      id="actual">
       </div>
-      <div ref={displayRef} id="display">{actual}</div>
+      <div ref={displayRef} id="display">0</div>
     </div>
   );
 };

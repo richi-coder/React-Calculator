@@ -5,8 +5,6 @@ import { Message } from "./Message"
 import { Display } from "./Display"
 import { calculation } from './calculation';
 
-let test = 'saludo'
-
 
 const Equals = ({resetMemory}) => {
   return <button
@@ -28,7 +26,7 @@ const Reset = ({reset}) => {
 const Operator = ({operator,operation,memory}) => {
   return (
     <button
-    disabled={(operator == "delete" && memory == [""]) ? true : false}
+    disabled={(operator == "delete" && memory == "") ? true : false}
     style={{backgroundColor: operator == "delete" ? "transparent" : "rgba(50, 52, 53, 0.75)"}}
     className="operator"
     id={operator === '+' ? 'add' : operator === '-' ? 'subtract' : operator === '/' ? 'divide' : operator === '*' ? 'multiply' : operator}
@@ -48,41 +46,46 @@ export default function App() {
   const memoryRef = useRef();
   const displayRef = useRef();
 
-  const [calcState, setCalcState] = useState({
-    memory: '',
-    actual: 0,
-  })
+  // const [calcState, setCalcState] = useState({
+  //   memory: '',
+  //   actual: 0,
+  // })
 
   function handleEnter(e) { // For numbers and point
-    
     const { target } = e;
     // Avoid entering multiple zeros at first
-    if (/^0{2,}/.test(calcState.actual + target.value)) {
-      setCalcState({
-        ...calcState,
-        memory: 0
-      })
+    if (/^0{2,}/.test(displayRef.current.innerHTML + target.value)) {
+      // setCalcState({
+      //   ...calcState,
+      //   memory: 0
+      // })
+      memoryRef.current.innerHTML = 0;
       return
     }
     // Avoiding multiple points
-    if (/\.\d+\./g.test(calcState.memory + target.value) || calcState.memory[calcState.memory.length - 1] === '.' && target.value === '.') return
+    if (/\.\d+\./g.test(memoryRef.current.innerHTML + target.value) || memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '.' && target.value === '.') return
 
-    // If equals symbols present in the memory expression
-    if (/=/.test(calcState.memory)) {
+    // If equals symbol is present in the memory expression
+    if (/=/.test(memoryRef.current.innerHTML)) {
       return
     }
     
     // If memory is empty (I mean, if there is a zero only)
-    if (calcState.actual === 0){
-      setCalcState({
-        actual: target.value,
-        memory: target.value
-      })
+    if (displayRef.current.innerHTML === 0){
+      // setCalcState({
+      //   actual: target.value,
+      //   memory: target.value
+      // })
+      displayRef.current.innerHTML = target.value;
+      memoryRef.current.innerHTML = target.value;
     } else {
-      setCalcState({
-        memory: calcState.memory + target.value,
-        actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
-      })
+      // setCalcState({
+      //   memory: calcState.memory + target.value,
+      //   actual: /\+$|\-$|\*$|\/$/.test(calcState.actual) ? target.value : calcState.actual + target.value,
+      // })
+      memoryRef.current.innerHTML = memoryRef.current.innerHTML + target.value;
+      displayRef.current.innerHTML = /\+$|\-$|\*$|\/$/.test(displayRef.current.innerHTML) ? target.value : displayRef.current.innerHTML + target.value
+
     }
   }
 
@@ -90,67 +93,80 @@ export default function App() {
   function operator(o) {
   
     // If = in the expression when entering operator, substitutes equales by the operator to continue calc
-    if (/=/.test(calcState.memory)) {
-      setCalcState({
-        memory: calcState.memory.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0] + o,
-        actual: o
-      })
+    if (/=/.test(memoryRef.current.innerHTML)) {
+      // setCalcState({
+      //   memory: calcState.memory.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0] + o,
+      //   actual: o
+      // })
+      memoryRef.current.innerHTML = memory.current.innerHTML.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0] + o;
+      displayRef.current.innerHTML = o
       return
     };
-    if (calcState.memory == '' && o == "-") {
-      setCalcState({
-        memory: '-',
-        actual: o
-      })
+    if (memoryRef.current.innerHTML == '' && o == "-") {
+      // setCalcState({
+      //   memory: '-',
+      //   actual: o
+      // })
+      memoryRef.current.innerHTML = '-';
+      displayRef.current.innerHTML = o;
       return
     }
     // If entering - after + - x or / ALLOW
-    if (o == '-' && (calcState.memory[calcState.memory.length - 1] === '+' || calcState.memory[calcState.memory.length - 1] === '*' || calcState.memory[calcState.memory.length - 1] === '/')) {
-      setCalcState({
-        memory: calcState.memory + o,
-        actual: o
-      })
+    if (o == '-' && (memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '+' || memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '*' || memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '/')) {
+      // setCalcState({
+      //   memory: calcState.memory + o,
+      //   actual: o
+      // })
+      memoryRef.current.innerHTML = memoryRef.current.innerHTML + o;
+      displayRef.current.innerHTML = o;
       return
     }
     // Avoid entering the same symbol
-    if (o === calcState.memory[calcState.memory.length - 1]) {
+    if (o === memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1]) {
       return
     }
-    if (/\D{2,}$/.test(calcState.memory + o)) {
-      let memoryString = calcState.memory + o
+    if (/\D{2,}$/.test(memoryRef.current.innerHTML + o)) {
+      let memoryString = memoryRef.current.innerHTML + o
       let value = memoryString.replace(memoryString.match(/\D{2,}$/), o)
-      setCalcState({
-        memory: value,
-        actual: o
-      })
+      // setCalcState({
+      //   memory: value,
+      //   actual: o
+      // })
+      memoryRef.current.innerHTML = value;
+      displayRef.current.innerHTML = o;
       return
     }
 
-    setCalcState({
-      memory: calcState.memory + o,
-      actual: o
-    })
+    // setCalcState({
+    //   memory: calcState.memory + o,
+    //   actual: o
+    // })
+    memoryRef.current.innerHTML = memoryRef.current.innerHTML + o;
+    displayRef.current.innerHTML = o;
 
   }
   
   function reset() {
-    setCalcState({
-      actual: 0,
-      memory: ''
-    })
+    // setCalcState({
+    //   actual: 0,
+    //   memory: ''
+    // })
+    memoryRef.current.innerHTML = '';
+    displayRef.current.innerHTML = 0;
   }
  
   function resetMemory() {
     // If there is no equals at memory DISPLAY
-    if (!/=/.test(calcState.memory)) {
-      const resultantExpression = calculation(calcState.memory+'=');
-      test = 'resultantExpression'
+    if (!/=/.test(memoryRef.current.innerHTML)) {
+      const resultantExpression = calculation(memoryRef.current.innerHTML+'=');
       // Checking output expression
       if (/INFINITY/.test(resultantExpression)) {
-        setCalcState({
-          memory: resultantExpression,
-          actual: 'INFINITY',
-        })
+        // setCalcState({
+        //   memory: resultantExpression,
+        //   actual: 'INFINITY',
+        // })
+        memoryRef.current.innerHTML = resultantExpression;
+        displayRef.current.innerHTML = 'INFINITY';
       } else {
         // setCalcState({
         //   memory: resultantExpression,
@@ -165,7 +181,7 @@ export default function App() {
   return (
     <div className="calculator">
       
-      <Display memory={calcState.memory} actual={calcState.actual} memoryRef={memoryRef} displayRef={displayRef} test={test} />
+      <Display memoryRef={memoryRef} displayRef={displayRef} />
       <div className="display-message">
         <div id="myId">Richi Coder</div>
       <Message />
@@ -174,7 +190,7 @@ export default function App() {
       <div className="buttons">
       <Number handleEnter={handleEnter} />
       <div className="operators">
-        <Operator operator={"delete"} operation={operator} memory={calcState.memory}/>
+        <Operator operator={"delete"} operation={operator} />
         <Operator operator={"/"} operation={operator} />
         <Operator operator={"*"} operation={operator} />
         <Operator operator={"-"} operation={operator} />
