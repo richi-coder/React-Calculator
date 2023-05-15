@@ -1,9 +1,11 @@
 import './style.css';
-import { useState, useEffect, memo } from 'react';
-import { Display } from "./Display"
+import { useRef, useState } from 'react';
 import { Number } from "./Number"
 import { Message } from "./Message"
+import { Display } from "./Display"
 import { calculation } from './calculation';
+
+let test = 'saludo'
 
 
 const Equals = ({resetMemory}) => {
@@ -43,12 +45,16 @@ const Operator = ({operator,operation,memory}) => {
 }
 
 export default function App() {
+  const memoryRef = useRef();
+  const displayRef = useRef();
+
   const [calcState, setCalcState] = useState({
     memory: '',
     actual: 0,
   })
 
   function handleEnter(e) { // For numbers and point
+    
     const { target } = e;
     // Avoid entering multiple zeros at first
     if (/^0{2,}/.test(calcState.actual + target.value)) {
@@ -138,7 +144,7 @@ export default function App() {
     // If there is no equals at memory DISPLAY
     if (!/=/.test(calcState.memory)) {
       const resultantExpression = calculation(calcState.memory+'=');
-      
+      test = 'resultantExpression'
       // Checking output expression
       if (/INFINITY/.test(resultantExpression)) {
         setCalcState({
@@ -146,18 +152,20 @@ export default function App() {
           actual: 'INFINITY',
         })
       } else {
-      setCalcState({
-        memory: resultantExpression,
-        actual: resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0],
-      })}
-      console.log(document.getElementById('display').innerHTML, 'vanilla')
+        // setCalcState({
+        //   memory: resultantExpression,
+        //   actual: resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0],
+        // })
+        memoryRef.current.innerHTML = resultantExpression;
+        displayRef.current.innerHTML = resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0];
+      }
     }
   }
 
   return (
     <div className="calculator">
       
-      <Display memory={calcState.memory} actual={calcState.actual} />
+      <Display memory={calcState.memory} actual={calcState.actual} memoryRef={memoryRef} displayRef={displayRef} test={test} />
       <div className="display-message">
         <div id="myId">Richi Coder</div>
       <Message />
