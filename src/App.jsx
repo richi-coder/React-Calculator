@@ -37,7 +37,6 @@ export default function App() {
     }
   }
 
-
   function operator(o) {
   
     // If = in the expression when entering operator, substitutes equales by the operator to continue calc
@@ -82,11 +81,14 @@ export default function App() {
     // If there is no equals at memory DISPLAY
     if (!/=/.test(memoryRef.current.innerHTML)) {
       const resultantExpression = calculation(memoryRef.current.innerHTML+'=');
+
       // Checking output expression
+      
+      // Infinity case (division by zero)
       if (/INFINITY/.test(resultantExpression)) {
         memoryRef.current.innerHTML = resultantExpression;
         displayRef.current.innerHTML = 'INFINITY';
-      } else {
+      } else { // Normal case
         memoryRef.current.innerHTML = resultantExpression;
         displayRef.current.innerHTML = resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0];
       }
@@ -95,7 +97,6 @@ export default function App() {
 
   return (
     <div className="calculator">
-      
       <Display memoryRef={memoryRef} displayRef={displayRef} />
       <div className="display-message">
         <div id="myId">Richi Coder</div>
