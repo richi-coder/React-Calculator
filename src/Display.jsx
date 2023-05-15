@@ -3,10 +3,9 @@ import { useEffect } from "react";
 export const Display = ({memoryRef, displayRef }) => {
 
   useEffect(() => {
-   memoryRef.current.innerHTML = '';
+    memoryRef.current.innerHTML = '';
     displayRef.current.innerHTML = 0
   }, [])
-  
 
   return (
     <div className="screen">

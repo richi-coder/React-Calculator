@@ -14,8 +14,8 @@ export function calculation(memory) {
   }
   console.log('initial', str);
 //******************/
-  const howManyDivs = str.match(/(\/)/g) // solo cuantos simbolos hay: 5
-  const howManyMult = str.match(/(\*)/g) // solo cuantos simbolos hay: 5
+  const howManyDivs = str.match(/(\/)/g) // Counting division symbols
+  const howManyMult = str.match(/(\*)/g) // Counting multiplication symbols
   let division = 1;
   let multiplication = 1;
   let whichDiv = [];
