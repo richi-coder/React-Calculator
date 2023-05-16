@@ -55,7 +55,7 @@ export default function App() {
     // Case delete operator
     if (o === 'delete') {
       // Case only 1 char at display and memory having only ''
-      if (displayRef.current.innerHTML.length === 1 && memoryRef.current.innerHTML == '') {
+      if (displayRef.current.innerHTML.length === 1 && memoryRef.current.innerHTML == '' || memoryRef.current.innerHTML.length === 1) {
         displayRef.current.innerHTML = 0;
         memoryRef.current.innerHTML = '';
       } else { // Case length more than 1
