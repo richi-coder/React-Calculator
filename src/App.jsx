@@ -1,4 +1,4 @@
-import './style.css';
+
 import { useRef, useState } from 'react';
 import { Number } from "./Number"
 import { Display } from "./Display"
@@ -13,13 +13,23 @@ export default function App() {
 
   function handleEnter(e) { // For numbers and point
     const { target } = e;
+    // Maximum input length
+    if ((displayRef.current.innerHTML + e.target.value).length >= 9) {
+      return
+    }
     // Avoid entering multiple zeros at first
     if (/^0{2,}/.test(displayRef.current.innerHTML + target.value)) {
       memoryRef.current.innerHTML = 0;
       return
     }
     // Avoiding multiple points
-    if (/\.\d+\./g.test(memoryRef.current.innerHTML + target.value) || memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '.' && target.value === '.') return
+    if (/\.\d+\./g.test(memoryRef.current.innerHTML + target.value) || memoryRef.current.innerHTML[memoryRef.current.innerHTML.length - 1] === '.' && target.value === '.') {
+      return
+    } else if (e.target.value === '.') {
+      displayRef.current.innerHTML+= '.';
+      memoryRef.current.innerHTML+= '.';
+      return
+    }
 
     // If equals symbol is present in the memory expression
     if (/=/.test(memoryRef.current.innerHTML)) {
@@ -35,9 +45,29 @@ export default function App() {
       displayRef.current.innerHTML = /\+$|\-$|\*$|\/$/.test(displayRef.current.innerHTML) ? target.value : displayRef.current.innerHTML + target.value
 
     }
+    memoryRef.current.scrollTo({
+      behavior: 'smooth',
+      left: 1000
+    })
   }
 
   function operator(o) {
+    // Case delete operator
+    if (o === 'delete') {
+      // Case only 1 char at display and memory having only ''
+      if (displayRef.current.innerHTML.length === 1 && memoryRef.current.innerHTML == '') {
+        displayRef.current.innerHTML = 0;
+        memoryRef.current.innerHTML = '';
+      } else { // Case length more than 1
+        memoryRef.current.innerHTML = memoryRef.current.innerHTML.slice(0, memoryRef.current.innerHTML.length - 1)
+        if (!/\D/.test(displayRef.current.innerHTML)) {
+          displayRef.current.innerHTML = displayRef.current.innerHTML.slice(0, displayRef.current.innerHTML.length - 1)
+        } else {
+          displayRef.current.innerHTML = memoryRef.current.innerHTML;
+        }
+      }
+      return
+    }
   
     // If = in the expression when entering operator, substitutes equales by the operator to continue calc
     if (/=/.test(memoryRef.current.innerHTML)) {
@@ -93,13 +123,17 @@ export default function App() {
         displayRef.current.innerHTML = resultantExpression.match(/-{0,}\d+$|-{0,}\d+\.\d+$/)[0];
       }
     }
+    memoryRef.current.scrollTo({
+      behavior: 'smooth',
+      left: 1000
+    })
   }
 
   return (
     <div className="calculator">
       <Display memoryRef={memoryRef} displayRef={displayRef} />
       <div className="display-message">
-        <div id="myId">Richi Coder</div>
+        <div id="myId" style={{marginLeft: '10px'}}>Richi Coder</div>
       </div>
       <br />
       <div className="buttons">

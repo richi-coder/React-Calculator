@@ -42,9 +42,9 @@ export function calculation(memory) {
             str = str.match(/([\+|\-]{0,1}\d+\.\d+|[\+|\-]{0,1}\d+)/g)
                             .map(x => parseFloat(x))
                             .reduce((e,acum) => e + acum, 0)
-                            .toFixed(10);
+                            .toFixed(4);
         // }
-const result = /\.0{10}$/.test(str) ? parseInt(str.toString()) : /0+$/.test(str) ? str.replace(/0+$/,'') : str;
+const result = /\.0{4}$/.test(str) ? parseInt(str.toString()) : /0+$/.test(str) ? str.replace(/0+$/,'') : str;
  
 console.log('FINAAL', result, initialExpression + result);
   //----------------------------
