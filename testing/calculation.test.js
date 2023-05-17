@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { calculation } from "../src/calculation"
 
-describe('first', () => { 
+describe('Calculation Function', () => { 
     
     it('adding to numbers', () => {
         expect(calculation('1+2=')).toBe('1+2=3')
